@@ -1,6 +1,7 @@
 package PongGame;
 
 import java.awt.*;
+import java.lang.Math;
 
 /**
  * Created by Danyon on 22/06/2016.
@@ -63,8 +64,13 @@ public class PaddleAI {
         setPoints();
         traceBall();
         distanceToBall();
-        moveAI();
-        //checkInRange();
+        if (distToBall > 200 && distToBall < -200 ) {
+
+        }
+        else {
+            //checkInRange();
+            moveAI();
+        }
     }
 
     public void moveAI() {
@@ -94,13 +100,13 @@ public class PaddleAI {
     }
 
     //Paddle Moves based on predicted rebound position
-    public void traceBall(){
+    public void traceBall() {
         ballPath();
-        if(player2.y + (player2.height/2) > reboundOneY){
+        if (player2.y + (player2.height / 2) > reboundOneY) {
             moveDown = false;
             moveUp = true;
         }
-        else{
+        else {
             moveUp = false;
             moveDown = true;
         }
@@ -130,11 +136,17 @@ public class PaddleAI {
         }
     }
 
+    //GETS DISTANCE BETWEEN TWO POINTS
     public void getPosition() {
-        this.dToBBelowQOne = (player2.y + (player2.height / 3)) - (ball.y + (ball.height / 2));
-        this.dToBBelowQThree = (player2.y + ((player2.height / 3) * 3)) - (ball.y + (ball.height / 2));
-        this.dToBAboveQThree = (ball.y + (ball.height / 2)) - (player2.y + ((player2.height / 3) * 2));
-        this.dToBAboveQOne = (ball.y + (ball.height / 2)) - (player2.y + (player2.height / 3));
+        //From 1st THIRD LINE TO BALL
+        this.dToBBelowQOne = (float) Math.sqrt(Math.pow(pTopX - ballMidX,2) +
+                Math.pow(pOneY - ballMidY,2));
+        this.dToBAboveQOne = (float) Math.sqrt(Math.pow(ballMidX - pTopX,2) +
+                Math.pow(ballMidY - pOneY,2));
+        this.dToBBelowQThree = (float) Math.sqrt(Math.pow(pTopX - ballMidX,2) +
+                Math.pow(pTwoY - ballMidY,2));
+        this.dToBAboveQThree = (float) Math.sqrt(Math.pow(ballMidX - pTopX,2) +
+                Math.pow(ballMidY - pTwoY,2));
     }
 
     public void adjustStats() {
@@ -144,17 +156,17 @@ public class PaddleAI {
 
     public void ballPath() {
         checkNotSideBorders();
-        if(reboundOneX > player2.pong.width){
-            if(ball.velY < 0) {
+        if (reboundOneX > player2.pong.width) {
+            if (ball.velY < 0) {
                 reboundOneY = (ball.pong.width - (ball.x + ball.width));
                 reboundOneX = ball.pong.width;
             }
-            else{
+            else {
                 reboundOneY = ball.y + ((ball.pong.width - (ball.x + ball.width)));
                 reboundOneX = ball.pong.width;
             }
         }
-        else if(reboundOneX < 0){
+        else if (reboundOneX < 0) {
             reboundOneY = (ball.x + (ball.width / 2));
             reboundOneX = 0;
         }
@@ -164,7 +176,7 @@ public class PaddleAI {
     //DRAWS THE PATH OF THE BALL
     public void checkNotSideBorders() {
         //IF ball is travelling right
-        if(ball.velX > 0) {
+        if (ball.velX > 0) {
             //IF ball is travelling up
             if (ball.velY < 0) {
                 reboundOneX = ball.x + ball.y;
@@ -177,7 +189,7 @@ public class PaddleAI {
             }
         }
         //ELSE ball is travelling left
-        else{
+        else {
             //IF ball is travelling up
             if (ball.velY < 0) {
                 reboundOneX = ball.x - ball.y;
@@ -204,6 +216,6 @@ public class PaddleAI {
 
         g.setColor(Color.BLACK);
         //Ball path
-        g.drawLine((int) ballMidX, (int) ballMidY, (int) reboundOneX, (int)reboundOneY);
+        g.drawLine((int) ballMidX, (int) ballMidY, (int) reboundOneX, (int) reboundOneY);
     }
 }

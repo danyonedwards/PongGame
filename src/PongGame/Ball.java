@@ -18,8 +18,8 @@ public class Ball {
     public float y;
 
     //Ball x and y velocity
-    public double velY = 8;
-    public double velX = 8;
+    public double velY = 0.5;
+    public double velX = -0.5;
 
     final int secondToWait = 3;
     final int timerToSeconds = 200 / secondToWait;
